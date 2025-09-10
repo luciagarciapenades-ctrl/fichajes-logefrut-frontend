@@ -18,3 +18,4 @@ FICHAJES_DB = path("fichajes.db")
 RRHH_DB     = path("rrhh.db")
 BAJAS_DIR   = path("bajas_adjuntos")
 os.makedirs(BAJAS_DIR, exist_ok=True)
+
