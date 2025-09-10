@@ -1,5 +1,4 @@
-email,nombre,clave,rol,superior,dias_vacaciones
-lucia.garcia.penades@gmail.com,admin,admin,admin,,30
-lucia.garcia.penades@gmail.com,Lucia Garcia,*,empleado,admin,22
-david@empresa.com,David Calero,*,empleado,admin,22
-carlos.molina.penades@gmail.com,Carlos Molina,*,empleado,admin,22
+email,nombre,rol,superior,dias_vacaciones
+lucia.garcia.penades@gmail.com,Lucia Garcia,admin,admin,30
+carlos.molina.penades@gmail.com,Carlos Molina,admin,admin,22
+
