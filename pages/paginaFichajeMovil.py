@@ -39,7 +39,7 @@ BAJAS_DIR   = os.path.join(BASE_DIR, "bajas_adjuntos")
 os.makedirs(BAJAS_DIR, exist_ok=True)
 
 # Coordenadas de la oficina (lat, lon) y radio permitido (km)
-OFFICE_COORD = (38.85019, -1.02822)
+OFFICE_COORD = (41.51762, 2.19930)
 DISTANCIA_MAXIMA = 0.1  # 100 m
 
 # ======== Login ========
@@ -268,4 +268,5 @@ if not df_hist.empty:
         "fuente": "Método",
     })
 st.dataframe(df_hist, use_container_width=True)
+
 
