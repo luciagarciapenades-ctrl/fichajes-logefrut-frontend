@@ -1,15 +1,14 @@
 import streamlit as st
-import supabase_login_shim as auth      
-import ui_pages as ui                    
+import supabase_login_shim as auth
+import ui_pages as ui  # <- tu archivo renombrado
 
-st.set_page_config(page_title="Fichajes", page_icon="🕒", layout="centered")
+st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
-# Muestra el login (si no está logueado hace st.stop())
-auth.generarLogin(__file__)
+# fuerza login; si no hay sesión, hace st.stop() dentro
+auth.generarLogin(__file__, go_to="inicio.py")
 
-# Si llega aquí, hay usuario → dibuja la home de tu app
+# si estamos aquí, hay usuario logueado
 ui.render_home(st.session_state["usuario"])
-
 
     
    
