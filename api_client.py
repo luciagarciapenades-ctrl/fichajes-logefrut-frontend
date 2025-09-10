@@ -39,3 +39,6 @@ def post_baja(user_id: str, usuario: str, tipo: str, fi, ff, descripcion: str, f
 
 def get_bajas(user_id: str):
     return _r("GET", "/bajas", params={"user_id": user_id})
+
+
+
