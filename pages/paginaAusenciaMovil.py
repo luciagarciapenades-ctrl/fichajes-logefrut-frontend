@@ -1,13 +1,16 @@
 import streamlit as st
 import pandas as pd
 #import login as login
-import os
 import sqlite3
 from datetime import datetime, date, timedelta
 import config as cfg
 
+import os, sys
+ROOT = os.path.dirname(os.path.dirname(__file__))  # .../app
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 import supabase_login_shim as auth
-import login as ui
+import ui_pages as ui
 from api_client import (post_vacaciones, get_vacaciones, cancel_vacacion,
                         post_baja, get_bajas)
 
@@ -212,4 +215,7 @@ with tab2:
                             with open(ruta, "rb") as f:
                                 st.download_button(f"Descargar adjunto {i+1}", f.read(), file_name=os.path.basename(ruta), key=f"dl_{row['id']}_{i}")
                         except Exception:
+
+                            st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
+
                             st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
