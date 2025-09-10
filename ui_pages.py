@@ -14,7 +14,7 @@ except Exception:
 
 
 # Option 1: Use double backslashes
-LOGO_PATH = "C:\\FichajesMovil\\assets\\logo_penades.webp"
+LOGO_PATH = "assets/logo_logefrut.webp"
 
 
 
