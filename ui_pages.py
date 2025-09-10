@@ -14,7 +14,7 @@ except Exception:
 
 
 # Option 1: Use double backslashes
-LOGO_PATH = "assets/logefrut_logo.webp"
+LOGO_PATH = "assets/logefrut_logo.jpg"
 
 
 
