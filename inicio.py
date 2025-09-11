@@ -7,15 +7,17 @@ st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 # ---- Estilos base: sin header, sin menú y con menos margen superior ----
 st.markdown("""
 <style>
-/* Oculta header y toolbar de Streamlit */
-header[data-testid="stHeader"] { display: none; }
-div[data-testid="stToolbar"] { display: none; }
-
-/* Oculta el menú de los tres puntos y el footer */
+/* Oculta el menú de los tres puntos de Streamlit (versiones nuevas) */
+div[data-testid="stMainMenu"] { display: none !important; }
+/* Compatibilidad con versiones antiguas */
 #MainMenu { visibility: hidden; }
+
+/* Oculta header/toolbar y footer */
+header[data-testid="stHeader"] { display: none !important; }
+div[data-testid="stToolbar"] { display: none !important; }
 footer { visibility: hidden; }
 
-/* Reduce padding/margen superior del contenido */
+/* Reduce el hueco superior */
 .block-container { padding-top: 0.25rem; padding-bottom: 0.5rem; }
 .stApp { margin-top: 0 !important; }
 </style>
