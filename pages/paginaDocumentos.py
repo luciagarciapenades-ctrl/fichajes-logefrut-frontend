@@ -129,10 +129,10 @@ for doc in DOCS:
 
                 # 4) Sube a Storage (signed-docs)
                 path = f"signed/{user_id}/{doc['id']}_{int(time.time())}.pdf"
-                sb.storage.from_("signed-docs").upload(path, signed_pdf, {"content-type":"application/pdf"})
+                sb.storage.from_("documentos_firmados").upload(path, signed_pdf, {"content-type":"application/pdf"})
 
                 # 5) Inserta registro
-                public_url = sb.storage.from_("signed-docs").get_public_url(path)  # si bucket es privado, omite esto
+                #public_url = sb.storage.from_("documentos_firmados").get_public_url(path)  # si bucket es privado, omite esto
                 sb.table("doc_signatures").insert({
                     "user_id": user_id,
                     "doc_id": doc["id"],
