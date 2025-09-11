@@ -8,7 +8,6 @@ st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 st.markdown("""
 <style>
 #MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
 
 /* Oculta header/toolbar y footer */
 header[data-testid="stHeader"] { display: none !important; }
