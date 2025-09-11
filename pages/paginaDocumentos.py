@@ -90,7 +90,7 @@ DOCS = [
     },
 ]
 
-st.title("📄 Documentos para firma")
+st.subheader("Documentos")
 
 # ---------- Traer firmas del usuario (por user_id si existe; si no, por user_key) ----------
 q = sb.table("doc_signatures").select("*")
