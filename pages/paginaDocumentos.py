@@ -41,19 +41,18 @@ user_slug = user_name
 # Si tenemos Service Role, intentamos resolver el user_id en Supabase Auth
 if SR_KEY:
    try:
-        admin = create_client(SUPABASE_URL, SR_KEY)
-        page = admin.auth.admin.list_users(page=1, per_page=1000)
-        users = page.get("users") if isinstance(page, dict) else getattr(page, "users", [])
-        for u in users:
-            email = (u.get("email") if isinstance(u, dict) else getattr(u, "email", "")) or ""
-            if email.lower() == usuario_login:
-                user_id = u.get("id") if isinstance(u, dict) else getattr(u, "id", None)
-                break
-    except Exception:
-        pass 
+       admin = create_client(SUPABASE_URL, SR_KEY)
+       page = admin.auth.admin.list_users(page=1, per_page=1000)
+       users = page.get("users") if isinstance(page, dict) else getattr(page, "users", [])
+       for u in users:
+           email = (u.get("email") if isinstance(u, dict) else getattr(u, "email", "")) or ""
+           if email.lower() == usuario_login:
+               user_id = u.get("id") if isinstance(u, dict) else getattr(u, "id", None)
+               break
+   except Exception:
+       pass 
 if not user_id:
-    st.error(
-        "No se pudo obtener tu usuario autenticado en Supabase.")
+    st.error("No se pudo obtener tu usuario autenticado en Supabase.")
 
 # ---------- Catálogo de documentos (rutas públicas en bucket 'docs') ----------
 DOCS = [
