@@ -1,5 +1,4 @@
 # pages/paginaDocumentos.py
-# pages/paginaDocumentos.py
 import io, time, requests
 from datetime import datetime
 import streamlit as st
@@ -14,57 +13,36 @@ import ui_pages as ui
 st.set_page_config(page_title="Documentos", layout="wide")
 
 # ---- Login y menú estándar de tu app ----
-auth.generarLogin(__file__)  # ya corta si no hay sesión (según tu shim)
-ui.generarMenuRoles(st.session_state.get("usuario", ""))  # o ui.generarMenu(...)
+# Tu shim hace stop() si no hay sesión "local" (cookie/CSV)
+auth.generarLogin(__file__)
+ui.generarMenuRoles(st.session_state.get("usuario", ""))
 
 # ---- Supabase client (usa tus secrets) ----
 from supabase import create_client
 
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
-# Ojo: en tu proyecto la anon key está como VITE_SUPABASE_ANON_KEY
-SUPABASE_ANON_KEY = st.secrets["VITE_SUPABASE_ANON_KEY"]
+# En tu proyecto la anon key está como VITE_SUPABASE_ANON_KEY (deja fallback por si acaso)
+SUPABASE_ANON_KEY = st.secrets.get("VITE_SUPABASE_ANON_KEY") or st.secrets["SUPABASE_ANON_KEY"]
 
 sb = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-# ---------- Identidad híbrida (Supabase Auth si existe; si no, login local CSV) ----------
-def get_identity():
-    # 1) Intentar sesión real de Supabase (si en algún momento haces sign_in desde Python)
-    try:
-        u = sb.auth.get_user()
-        if u and u.user:
-            email = (u.user.email or "").lower()
-            return {
-                "mode": "supabase",
-                "user_id": u.user.id,              # uuid real
-                "user_key": email,                 # texto (email)
-                "user_name": email.split("@")[0],
-                "slug": email.split("@")[0],       # por si lo usamos en Storage
-            }
-    except Exception:
-        pass
+# ---------- Identidad (DEBE existir usuario autenticado en Supabase Auth) ----------
+try:
+    u = sb.auth.get_user()
+    user_id = u.user.id if u and u.user else None
+except Exception:
+    user_id = None
 
-    # 2) Fallback a tu login por CSV + cookie (st.session_state['usuario'])
-    if "usuario" in st.session_state:
-        key = str(st.session_state["usuario"]).strip().lower()
-        return {
-            "mode": "local",
-            "user_id": None,
-            "user_key": key,
-            "user_name": key.split("@")[0],
-            "slug": key.split("@")[0],
-        }
-
-    return None
-
-ident = get_identity()
-if not ident:
-    st.warning("Acceso denegado. Inicia sesión.")
+if not user_id:
+    st.error(
+        "No se pudo obtener tu usuario autenticado en Supabase.\n\n"
+        "Para firmar documentos debes iniciar sesión con **Supabase Auth** "
+        "(las cuentas alias tipo `nombre@loge.local`)."
+    )
     st.stop()
 
-user_id   = ident["user_id"]     # puede ser None si no hay Supabase Auth
-user_key  = ident["user_key"]    # SIEMPRE disponible
-user_name = ident["user_name"]
-user_slug = ident["slug"]
+user_email = (u.user.email or "").lower()
+user_name = user_email.split("@")[0]
 
 # ---------- Catálogo de documentos (rutas públicas en bucket 'docs') ----------
 DOCS = [
@@ -92,10 +70,14 @@ DOCS = [
 
 st.subheader("Documentos")
 
-# ---------- Traer firmas del usuario (por user_id si existe; si no, por user_key) ----------
-q = sb.table("doc_signatures").select("*")
-q = q.eq("user_id", user_id) if user_id else q.eq("user_key", user_key)
-firmas = (q.execute().data) or []
+# ---------- Traer firmas del usuario (por user_id) ----------
+firmas = (
+    sb.table("doc_signatures")
+      .select("*")
+      .eq("user_id", user_id)
+      .execute()
+      .data
+) or []
 firmas_by_id = {r["doc_id"]: r for r in firmas}
 
 # ---------- Listado ----------
@@ -111,6 +93,7 @@ for doc in DOCS:
             f = firmas_by_id[doc["id"]]
             dt_iso = f.get("signed_at") or f.get("uploaded_at")
             if dt_iso:
+                # formateo simple sin depender de timezone
                 fecha_txt = dt_iso.split(".")[0].replace("T", " ")
                 st.caption(f"✅ Firmado — {fecha_txt}")
             else:
@@ -187,8 +170,7 @@ for doc in DOCS:
                 signed_pdf = out.getvalue()
 
                 # 5) Subir a Storage (bucket PRIVADO) guardando SOLO el PATH
-                # Si hay uuid real, úsalo; si no, usa el slug textual (prefijo del usuario)
-                path = f"signed/{(user_id or user_slug)}/{doc['id']}_{int(time.time())}.pdf"
+                path = f"signed/{user_id}/{doc['id']}_{int(time.time())}.pdf"
                 try:
                     sb.storage.from_("documentos_firmados").upload(
                         path, signed_pdf, {"content-type": "application/pdf"}
@@ -197,18 +179,14 @@ for doc in DOCS:
                     st.error(f"No se pudo subir el documento firmado: {e}")
                     st.stop()
 
-                # 6) Registrar en BD (siempre user_key; y user_id si existiera)
-                payload = {
+                # 6) Registrar en BD (user_id + path)
+                sb.table("doc_signatures").insert({
+                    "user_id": user_id,
                     "doc_id": doc["id"],
                     "doc_title": doc["title"],
-                    "signed_url": path,                           # PATH en el bucket privado
-                    "signed_at": datetime.utcnow().isoformat(),   # para mostrar fecha
-                    "user_key": user_key,
-                }
-                if user_id:
-                    payload["user_id"] = user_id
-
-                sb.table("doc_signatures").insert(payload).execute()
+                    "signed_url": path,                         # PATH en el bucket privado
+                    "signed_at": datetime.utcnow().isoformat()  # para mostrar fecha
+                }).execute()
 
                 st.success("Documento firmado y enviado correctamente.")
                 st.toast("¡Firmado!")
