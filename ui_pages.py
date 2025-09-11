@@ -17,7 +17,60 @@ except Exception:
 LOGO_MAIN = "assets/logefrut_logo_transparente.png"     # portada
 LOGO_SIDEBAR = "assets/logefrut_logo_transparente.png" #sidebar
 
+def apply_base_chrome(page_title: str = "Fichajes"):
+    """
+    Aplica la “piel” común de la app:
+    - Quita header, menú (⋮) y footer de Streamlit
+    - Reduce el padding superior
+    - Inicia con el sidebar colapsado
+    """
+    # Debe ejecutarse lo primero de la página; por si acaso, protegemos doble llamada
+    try:
+        st.set_page_config(
+            page_title=page_title,
+            layout="wide",
+            initial_sidebar_state="collapsed",
+            menu_items={}
+        )
+    except Exception:
+        # set_page_config solo puede llamarse una vez por página
+        pass
 
+    st.markdown("""
+    <style>
+      /* Oculta header/toolbar/menu/footers de Streamlit */
+      header[data-testid="stHeader"] { display: none !important; }
+      div[data-testid="stToolbar"]  { display: none !important; }
+      div[data-testid="stMainMenu"] { display: none !important; }
+      #MainMenu { visibility: hidden; }
+      footer { visibility: hidden; }
+
+      /* Reduce hueco superior e inferior del contenido */
+      .block-container { padding-top: .25rem; padding-bottom: .5rem; }
+      .stApp { margin-top: 0 !important; }
+
+      /* (Opcional) Oculta la nav automática de multipage en el sidebar */
+      div[data-testid="stSidebarNav"]{ display:none !important; }
+    </style>
+    """, unsafe_allow_html=True)
+
+def collapse_sidebar_on_load():
+    """
+    Colapsa el sidebar al cargar la página (útil tras navegar).
+    """
+    components.html("""
+    <script>
+      (function(){
+        const clickIt = () => {
+          const doc = parent.document;
+          const btn = doc.querySelector('[data-testid="stSidebarCollapseButton"]');
+          const sb  = doc.querySelector('[data-testid="stSidebar"]');
+          if (btn && sb && getComputedStyle(sb).display !== 'none') btn.click();
+        };
+        setTimeout(clickIt, 0);
+      })();
+    </script>
+    """, height=0, width=0)
 
 
 # =========================
