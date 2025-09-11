@@ -9,6 +9,7 @@ import fitz  # PyMuPDF
 # App: login / menús (tu shim y helpers)
 import supabase_login_shim as auth
 import ui_pages as ui
+from supabase import create_client
 
 st.set_page_config(page_title="Documentos", layout="wide")
 
@@ -23,26 +24,34 @@ from supabase import create_client
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 # En tu proyecto la anon key está como VITE_SUPABASE_ANON_KEY (deja fallback por si acaso)
 SUPABASE_ANON_KEY = st.secrets.get("VITE_SUPABASE_ANON_KEY") or st.secrets["SUPABASE_ANON_KEY"]
+SR_KEY   = st.secrets.get("SUPABASE_SERVICE_ROLE")
 
 sb = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 # ---------- Identidad (DEBE existir usuario autenticado en Supabase Auth) ----------
-try:
-    u = sb.auth.get_user()
-    user_id = u.user.id if u and u.user else None
-except Exception:
-    user_id = None
-
-if not user_id:
-    st.error(
-        "No se pudo obtener tu usuario autenticado en Supabase.\n\n"
-        "Para firmar documentos debes iniciar sesión con **Supabase Auth** "
-        "(las cuentas alias tipo `nombre@loge.local`)."
-    )
+usuario_login = st.session_state.get("usuario", "").strip().lower()
+if not usuario_login:
+    st.warning("Acceso denegado. Inicia sesión.")
     st.stop()
 
-user_email = (u.user.email or "").lower()
-user_name = user_email.split("@")[0]
+user_id   = None
+user_name = usuario_login.split("@")[0]
+user_slug = user_name
+
+# Si tenemos Service Role, intentamos resolver el user_id en Supabase Auth
+if SR_KEY:
+    admin = create_client(SUPABASE_URL, SR_KEY)
+    try:
+        # Supabase-py Admin API: lista usuarios y busca por email
+        page = admin.auth.admin.list_users(page=1, per_page=1000)
+        users = page.get("users") if isinstance(page, dict) else getattr(page, "users", [])
+        for usr in users:
+            email = (usr.get("email") if isinstance(usr, dict) else getattr(usr, "email", "")) or ""
+            if email.lower() == usuario_login:
+                user_id = usr.get("id") if isinstance(usr, dict) else getattr(usr, "id", None)
+                break
+    except Exception:
+        pass 
 
 # ---------- Catálogo de documentos (rutas públicas en bucket 'docs') ----------
 DOCS = [
