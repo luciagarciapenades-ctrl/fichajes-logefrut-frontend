@@ -91,7 +91,7 @@ def render_home(usuario: str):
     n_pend = int(pendientes.shape[0])
 
 
-    st.image(LOGO_MAIN, use_column_width=True, width=220)
+    #st.image(LOGO_MAIN, use_column_width=True, width=220)
 
     # Saludo y fecha
     st.markdown('<div class="hero">', unsafe_allow_html=True)
