@@ -190,6 +190,13 @@ for doc in DOCS:
                     sb.storage.from_("documentos_firmados").upload(
                         path, signed_pdf, {"content-type": "application/pdf"}
                     )
+                    sb.table("doc_signatures").insert({
+                        "user_id": user_id,
+                        "doc_id": doc["id"],
+                        "doc_title": doc["title"],
+                        "signed_url": path,
+                        "signed_at": datetime.utcnow().isoformat()
+                    }).execute()
                 except Exception as e:
                     st.error(f"No se pudo subir el documento firmado: {e}")
                     st.stop()
