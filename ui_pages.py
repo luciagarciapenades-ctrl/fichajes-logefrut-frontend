@@ -190,7 +190,7 @@ def validarUsuario(usuario, clave):
 def generarMenu(usuario):
     """Menú lateral simple con enlaces fijos por rol (robusto a email/usuario)."""
     with st.sidebar:
-         st.markdown("""
+        st.markdown("""
         <style>
         [data-testid="stSidebar"] img{
             max-width: 140px;     
