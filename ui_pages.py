@@ -125,7 +125,7 @@ def render_home(usuario: str):
 
     st.markdown("### ")
     # Accesos tipo “barra inferior”
-    c1, c2, c3 = st.columns(3)
+    c1, c2, c3, c4 = st.columns(4)
     with c1:
         if st.button("🗓️ Fichaje", use_container_width=True):
             st.switch_page("pages/paginaFichajeMovil.py")   
@@ -134,7 +134,10 @@ def render_home(usuario: str):
             st.switch_page("pages/paginaAusenciaMovil.py")
     with c3:
         if st.button("🧾 Modificar fechas", use_container_width=True):
-            st.switch_page("pages/paginaModFechaMovil.py")     
+            st.switch_page("pages/paginaModFechaMovil.py")
+    with c4:
+        if st.button("🧾 Documentos", use_container_width=True):
+            st.switch_page("pages/paginaDocumentos.py")
 
     
 
