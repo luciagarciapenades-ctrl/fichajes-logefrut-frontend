@@ -8,9 +8,9 @@ st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 st.markdown("""
 <style>
 /* Oculta el menú de los tres puntos de Streamlit (versiones nuevas) */
-div[data-testid="stMainMenu"] { display: none !important; }
+#div[data-testid="stMainMenu"] { display: none !important; }
 /* Compatibilidad con versiones antiguas */
-#MainMenu { visibility: hidden; }
+MainMenu { visibility: hidden; }
 
 /* Oculta header/toolbar y footer */
 header[data-testid="stHeader"] { display: none !important; }
