@@ -14,7 +14,8 @@ except Exception:
 
 
 # Option 1: Use double backslashes
-LOGO_PATH = "assets/logefrut_logo.jpg"
+LOGO_MAIN = "assets/logefrut_logo_transparente.png"     # portada
+LOGO_SIDEBAR = "assets/logefrut_logo_transparente.png" #sidebar
 
 
 
@@ -90,7 +91,7 @@ def render_home(usuario: str):
     n_pend = int(pendientes.shape[0])
 
 
-    st.image(LOGO_PATH, use_column_width=True, width=420)
+    st.image(LOGO_MAIN, use_column_width=True, width=220)
 
     # Saludo y fecha
     st.markdown('<div class="hero">', unsafe_allow_html=True)
@@ -186,7 +187,17 @@ def validarUsuario(usuario, clave):
 def generarMenu(usuario):
     """Menú lateral simple con enlaces fijos por rol (robusto a email/usuario)."""
     with st.sidebar:
-        st.image(LOGO_PATH, use_column_width=True)
+         st.markdown("""
+        <style>
+        [data-testid="stSidebar"] img{
+            max-width: 140px;     
+            margin: 8px auto 12px;
+            display: block;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        st.image(LOGO_SIDEBAR, width=140) 
         dfusuarios = _load_users()
         dfUsuario = _match_user(dfusuarios, usuario)
 
@@ -238,7 +249,17 @@ def validarPagina(pagina, usuario):
 def generarMenuRoles(usuario):
     """Menú lateral según csv de páginas/roles, con opción de ocultar o deshabilitar."""
     with st.sidebar:
-        st.image(LOGO_PATH, use_column_width=True)
+        st.markdown("""
+        <style>
+        [data-testid="stSidebar"] img{
+            max-width: 140px;
+            margin: 8px auto 12px;
+            display: block;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        st.image(LOGO_SIDEBAR, width=140)
         dfusuarios = _load_users()
         dfPaginas = pd.read_csv(PAGINAS_CSV)
 
