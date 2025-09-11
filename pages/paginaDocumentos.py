@@ -18,7 +18,7 @@ ui.generarMenuRoles(st.session_state.get("usuario",""))  # o generarMenu(...)
 # ---------- Config Supabase (usa tus helpers si ya tienes uno) ----------
 from supabase import create_client
 SUPABASE_URL = st.secrets["SUPABASE_URL"]  # ya lo usas en la app
-SUPABASE_ANON_KEY = st.secrets["SUPABASE_ANON_KEY"]
+SUPABASE_ANON_KEY = st.secrets["VITE_SUPABASE_ANON_KEY"]
 sb = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 # Datos del usuario
