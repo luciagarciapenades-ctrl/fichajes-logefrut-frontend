@@ -44,7 +44,6 @@ DISTANCIA_MAXIMA = 0.1  # 100 m
 
 # ======== Login ========
 auth.generarLogin(__file__)    # garantiza sesión
-ui.generarLogin(__file__) 
 ui.generarMenuRoles(st.session_state["usuario"])
 
 # ======== DB (SQLite) ========
@@ -269,6 +268,7 @@ if not df_hist.empty:
         "fuente": "Método",
     })
 st.dataframe(df_hist, use_container_width=True)
+
 
 
 
