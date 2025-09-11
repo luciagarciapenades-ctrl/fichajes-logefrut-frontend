@@ -40,18 +40,20 @@ user_slug = user_name
 
 # Si tenemos Service Role, intentamos resolver el user_id en Supabase Auth
 if SR_KEY:
-    admin = create_client(SUPABASE_URL, SR_KEY)
-    try:
-        # Supabase-py Admin API: lista usuarios y busca por email
+   try:
+        admin = create_client(SUPABASE_URL, SR_KEY)
         page = admin.auth.admin.list_users(page=1, per_page=1000)
         users = page.get("users") if isinstance(page, dict) else getattr(page, "users", [])
-        for usr in users:
-            email = (usr.get("email") if isinstance(usr, dict) else getattr(usr, "email", "")) or ""
+        for u in users:
+            email = (u.get("email") if isinstance(u, dict) else getattr(u, "email", "")) or ""
             if email.lower() == usuario_login:
-                user_id = usr.get("id") if isinstance(usr, dict) else getattr(usr, "id", None)
+                user_id = u.get("id") if isinstance(u, dict) else getattr(u, "id", None)
                 break
     except Exception:
         pass 
+if not user_id:
+    st.error(
+        "No se pudo obtener tu usuario autenticado en Supabase.")
 
 # ---------- Catálogo de documentos (rutas públicas en bucket 'docs') ----------
 DOCS = [
@@ -80,13 +82,17 @@ DOCS = [
 st.subheader("Documentos")
 
 # ---------- Traer firmas del usuario (por user_id) ----------
-firmas = (
-    sb.table("doc_signatures")
-      .select("*")
-      .eq("user_id", user_id)
-      .execute()
-      .data
-) or []
+if user_id:
+    firmas = (
+        sb.table("doc_signatures")
+          .select("*")
+          .eq("user_id", user_id)
+          .execute()
+          .data
+    ) or []
+else:
+    firmas = []  # evita el error de UUID si aún no resolvimos el id
+
 firmas_by_id = {r["doc_id"]: r for r in firmas}
 
 # ---------- Listado ----------
