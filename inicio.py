@@ -4,6 +4,13 @@ import ui_pages as ui  # <- tu archivo renombrado
 
 st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
+#margen más pequeño 
+st.markdown("""
+<style>
+.block-container { padding-top: 0.6rem; }
+</style>
+""", unsafe_allow_html=True)
+
 # fuerza login; si no hay sesión, hace st.stop() dentro
 auth.generarLogin(__file__, go_to="inicio.py")
 
