@@ -11,6 +11,22 @@ import supabase_login_shim as auth
 import ui_pages as ui
 from supabase import create_client
 
+##eliminar 3 puntos 
+def boot():
+    st.set_page_config(
+        layout="wide",
+        initial_sidebar_state="collapsed",
+        menu_items={"Get help": None, "Report a bug": None, "About": None}
+    )
+    st.markdown("""
+    <style>
+      /* Ocultar menú 3 puntos y footer */
+      div[data-testid="stMainMenu"] { visibility: hidden; }
+      #MainMenu { visibility: hidden; } /* compat */
+      footer { visibility: hidden; }
+    </style>
+    """, unsafe_allow_html=True)
+    
 st.set_page_config(page_title="Documentos", layout="wide")
 
 # ---- Login y menú estándar de tu app ----
