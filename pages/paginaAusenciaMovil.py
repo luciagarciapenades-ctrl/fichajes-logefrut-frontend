@@ -29,6 +29,26 @@ os.makedirs(BAJAS_DIR, exist_ok=True)
 auth.generarLogin(__file__)                     
 ui.generarMenuRoles(st.session_state["usuario"])
 
+st.set_page_config(
+    layout="wide",
+    initial_sidebar_state="collapsed",
+    menu_items={"Get help": None, "Report a bug": None, "About": None}
+)
+
+st.markdown("""
+<style>
+/* Streamlit antiguos */
+#MainMenu { display: none !important; visibility: hidden !important; }
+/* Streamlit recientes (data-testid) */
+div[data-testid="stMainMenu"] { display: none !important; visibility: hidden !important; }
+/* Si aún aparece, oculta toda la toolbar (incluye el icono de 3 puntos) */
+div[data-testid="stToolbar"] { display: none !important; visibility: hidden !important; }
+/* (Opcional) si ocultas la toolbar/encabezado y queda margen arriba, ajusta: */
+/* header[data-testid="stHeader"] { height: 0 !important; } */
+/* div.block-container { padding-top: 1rem !important; } */
+</style>
+""", unsafe_allow_html=True)
+
 
 # ======== Config DB (SQLite) ========
 DB_FILE = DB_RRHH
@@ -220,6 +240,7 @@ with tab2:
                             st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
 
                             st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
+
 
 
 
