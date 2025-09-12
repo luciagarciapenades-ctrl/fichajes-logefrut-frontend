@@ -14,6 +14,9 @@ import ui_pages as ui
 from api_client import (post_vacaciones, get_vacaciones, cancel_vacacion,
                         post_baja, get_bajas)
 
+from app_boot import boot
+boot()
+
 
 IS_CLOUD = "/mount/src" in os.getcwd()
 DEFAULT_DATA_DIR = "/mount/data" if IS_CLOUD else os.path.join(os.path.dirname(__file__), "data")
@@ -35,21 +38,7 @@ DB_FILE = DB_RRHH
 VAC_TABLE = "vacaciones"
 BAJ_TABLE = "bajas"
 
-##eliminar 3 puntos 
-def boot():
-    st.set_page_config(
-        layout="wide",
-        initial_sidebar_state="collapsed",
-        menu_items={"Get help": None, "Report a bug": None, "About": None}
-    )
-    st.markdown("""
-    <style>
-      /* Ocultar menú 3 puntos y footer */
-      div[data-testid="stMainMenu"] { visibility: hidden; }
-      #MainMenu { visibility: hidden; } /* compat */
-      footer { visibility: hidden; }
-    </style>
-    """, unsafe_allow_html=True)
+
 
 def get_conn():
     os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
@@ -234,4 +223,5 @@ with tab2:
                             st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
 
                             st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
+
 
