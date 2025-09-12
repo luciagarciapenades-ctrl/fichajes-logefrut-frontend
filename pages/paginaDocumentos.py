@@ -71,8 +71,8 @@ if SR_KEY:
                break
    except Exception:
        pass 
-if not user_id:
-    st.error("No se pudo obtener tu usuario autenticado en Supabase.")
+#if not user_id:
+    #st.error("No se pudo obtener tu usuario autenticado en Supabase.")
 
 # ---------- Catálogo de documentos (rutas públicas en bucket 'docs') ----------
 DOCS = [
