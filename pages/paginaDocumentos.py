@@ -30,7 +30,7 @@ div[data-testid="stToolbar"] { display: none !important; visibility: hidden !imp
 </style>
 """, unsafe_allow_html=True)
 
-ui.hide_top_ui(hide_menu=True, hide_footer=True, hide_header=False)
+
 
 # ---- Login y menú estándar de tu app ----
 # Tu shim hace stop() si no hay sesión "local" (cookie/CSV)
