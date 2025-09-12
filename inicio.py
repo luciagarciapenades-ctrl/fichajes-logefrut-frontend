@@ -3,6 +3,7 @@ import supabase_login_shim as auth
 import ui_pages as ui  # <- tu archivo renombrado
 
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
+ui.hide_top_ui(hide_menu=True, hide_footer=True, hide_header=False)
 
 # ---- Estilos base: sin header, sin menú y con menos margen superior ----
 st.markdown("""
