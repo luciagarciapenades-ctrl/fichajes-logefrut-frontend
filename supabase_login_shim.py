@@ -65,7 +65,7 @@ def generarLogin(archivo_actual: str = "", go_to: str = "inicio.py"):
                 st.switch_page(go_to)
             except Exception:
                 # Si no estás en multipage, al menos refrescamos
-                st.experimental_rerun()
+                st.rerun()
 
     if c2.button("Crear cuenta") and email and pwd:
         try:
@@ -77,4 +77,5 @@ def generarLogin(archivo_actual: str = "", go_to: str = "inicio.py"):
     # Si aún no hay sesión, no ejecutes nada más de la página
     if not st.session_state.get("user_id"):
         st.stop()
+
 
