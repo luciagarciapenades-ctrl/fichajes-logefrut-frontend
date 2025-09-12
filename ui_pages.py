@@ -17,7 +17,23 @@ except Exception:
 LOGO_MAIN = "assets/logefrut_logo_transparente.png"     # portada
 LOGO_SIDEBAR = "assets/logefrut_logo_transparente.png" #sidebar
 
+#ocultar menú 3 puntos 
+def hide_top_ui(hide_menu=True, hide_footer=True, hide_header=False):
+    css_parts = []
+    if hide_menu:
+        css_parts += [
+            # Streamlit nuevos
+            'div[data-testid="stMainMenu"] {visibility: hidden;}',
+            # Compat versiones antiguas
+            '#MainMenu {visibility: hidden;}',
+        ]
+    if hide_footer:
+        css_parts += ['footer {visibility: hidden;}']
+    if hide_header:
+        # Si además quieres quitar toda la barra superior
+        css_parts += ['header[data-testid="stHeader"] {height:0; visibility:hidden;}']
 
+    st.markdown(f"<style>{''.join(css_parts)}</style>", unsafe_allow_html=True)
 
 
 
