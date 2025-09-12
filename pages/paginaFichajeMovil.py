@@ -190,31 +190,44 @@ if metodo == "Geolocalización":
 else:
     st.caption("Escanea el QR de la oficina.")
     qr_texto = None
+    error_escanner = None
 
-    if qrcode_scanner is None:
-    # Si no está instalado el componente, no permitimos fichar por QR
-        st.error(
-            "El escáner de QR por cámara no está disponible. "
-            "Instala 'streamlit-qrcode-scanner' y abre la página en HTTPS o localhost."
-        )
-        motivo_bloqueo = "Escáner de QR no disponible."
-    else:
+    if qrcode_scanner is not None:
         try:
-            # Llama al escáner; en móvil abre la cámara
             qr_texto = qrcode_scanner("Abrir cámara y escanear")
         except Exception as e:
-            st.error(f"No se pudo abrir la cámara: {e}")
-            motivo_bloqueo = "No se pudo abrir la cámara."
+            error_escanner = str(e)
+            st.info("No se pudo usar el escáner directo. Probamos con la cámara del móvil como alternativa.")
 
+    # 2) Intento B (fallback): usar la cámara nativa de Streamlit y decodificar la foto
+    if not qr_texto:
+        img_file = st.camera_input("Usar cámara del móvil (foto del QR)")
+        if img_file and Image is not None and decode_qr is not None:
+            try:
+                img = Image.open(img_file)
+                results = decode_qr(img)
+                if results:
+                    qr_texto = results[0].data.decode("utf-8", errors="ignore")
+                    st.write(f"QR leído: `{qr_texto}`")
+                else:
+                    st.warning("No se detectó ningún QR en la imagen. Acerca un poco más y asegúrate de que esté enfocado.")
+            except Exception as e:
+                st.error(f"No se pudo procesar la imagen del QR: {e}")
+        elif img_file and (Image is None or decode_qr is None):
+            st.error("Falta instalar Pillow/pyzbar para decodificar el QR a partir de la foto.")
+
+    # Validación del QR y estado de fichaje
     if qr_texto:
-        st.write(f"QR leído: `{qr_texto}`")
         if is_qr_payload_valid(qr_texto):
             st.success("QR válido. Puedes fichar.")
             permitir_fichaje = True
         else:
             motivo_bloqueo = "QR no válido o caducado."
-    elif motivo_bloqueo is None:
-        motivo_bloqueo = "Aún no has escaneado un QR válido."
+    else:
+        if error_escanner:
+            st.warning(f"No se pudo abrir la cámara con el escáner directo: {error_escanner}")
+        if motivo_bloqueo is None:
+            motivo_bloqueo = "Aún no has escaneado un QR válido."
 
     
 
@@ -268,6 +281,7 @@ if not df_hist.empty:
         "fuente": "Método",
     })
 st.dataframe(df_hist, use_container_width=True)
+
 
 
 
