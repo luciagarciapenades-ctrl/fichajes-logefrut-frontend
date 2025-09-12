@@ -10,8 +10,7 @@ import fitz  # PyMuPDF
 import supabase_login_shim as auth
 import ui_pages as ui
 from supabase import create_client
-from app_boot import boot
-boot()
+
     
 st.set_page_config(page_title="Documentos", layout="wide")
 
