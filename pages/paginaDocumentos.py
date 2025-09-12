@@ -27,11 +27,22 @@ st.markdown("""
 div[data-testid="stMainMenu"] { display: none !important; visibility: hidden !important; }
 /* Si aún aparece, oculta toda la toolbar (incluye el icono de 3 puntos) */
 div[data-testid="stToolbar"] { display: none !important; visibility: hidden !important; }
-/* (Opcional) si ocultas la toolbar/encabezado y queda margen arriba, ajusta: */
-/* header[data-testid="stHeader"] { height: 0 !important; } */
-/* div.block-container { padding-top: 1rem !important; } */
 </style>
 """, unsafe_allow_html=True)
+
+def collapse_sidebar_if_flag():
+    if st.session_state.pop("_collapse_sidebar_now", False):
+        components.html("""
+        <script>
+        // en móvil, pulsa el botón de cerrar del sidebar
+        const doc = parent.document;
+        if (window.innerWidth < 840) {
+          const btn = doc.querySelector('[data-testid="collapsedControl"] button')
+                   || doc.querySelector('[data-testid="expandedControl"] button');
+          if (btn) btn.click();
+        }
+        </script>
+        """, height=0)
 
 # ---- Login y menú estándar de tu app ----
 # Tu shim hace stop() si no hay sesión "local" (cookie/CSV)
