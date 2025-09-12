@@ -14,9 +14,6 @@ import ui_pages as ui
 from api_client import (post_vacaciones, get_vacaciones, cancel_vacacion,
                         post_baja, get_bajas)
 
-from app_boot import boot
-boot()
-
 
 IS_CLOUD = "/mount/src" in os.getcwd()
 DEFAULT_DATA_DIR = "/mount/data" if IS_CLOUD else os.path.join(os.path.dirname(__file__), "data")
@@ -223,5 +220,6 @@ with tab2:
                             st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
 
                             st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
+
 
 
