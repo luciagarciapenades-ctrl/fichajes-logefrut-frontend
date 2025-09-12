@@ -32,20 +32,7 @@ except Exception:
     decode_qr = None
 
 
-st.markdown("""
-<style>
-#MainMenu {visibility: hidden;}
 
-/* Oculta header/toolbar y footer */
-header[data-testid="stHeader"] { display: none !important; }
-div[data-testid="stToolbar"] { display: none !important; }
-footer { visibility: hidden; }
-
-/* Reduce el hueco superior */
-.block-container { padding-top: 0.25rem; padding-bottom: 0.5rem; }
-.stApp { margin-top: 0 !important; }
-</style>
-""", unsafe_allow_html=True)
 
 # ======== Config ========
 BASE_DIR = st.secrets.get("DATA_DIR", "C:\\FichajesMovil\\data")
@@ -299,6 +286,7 @@ if not df_hist.empty:
         "fuente": "Método",
     })
 st.dataframe(df_hist, use_container_width=True)
+
 
 
 
