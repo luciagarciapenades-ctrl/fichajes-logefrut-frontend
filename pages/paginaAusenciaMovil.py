@@ -14,21 +14,6 @@ import ui_pages as ui
 from api_client import (post_vacaciones, get_vacaciones, cancel_vacacion,
                         post_baja, get_bajas)
 
-
-IS_CLOUD = "/mount/src" in os.getcwd()
-DEFAULT_DATA_DIR = "/mount/data" if IS_CLOUD else os.path.join(os.path.dirname(__file__), "data")
-
-BASE_DIR = st.secrets.get("DATA_DIR", DEFAULT_DATA_DIR)
-os.makedirs(BASE_DIR, exist_ok=True)
-
-DB_FICHAJES = os.path.join(BASE_DIR, "fichajes.db")
-DB_RRHH     = os.path.join(BASE_DIR, "rrhh.db")
-BAJAS_DIR   = os.path.join(BASE_DIR, "bajas_adjuntos")
-os.makedirs(BAJAS_DIR, exist_ok=True)
-
-auth.generarLogin(__file__)                     
-ui.generarMenuRoles(st.session_state["usuario"])
-
 st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -48,6 +33,23 @@ div[data-testid="stToolbar"] { display: none !important; visibility: hidden !imp
 /* div.block-container { padding-top: 1rem !important; } */
 </style>
 """, unsafe_allow_html=True)
+
+
+IS_CLOUD = "/mount/src" in os.getcwd()
+DEFAULT_DATA_DIR = "/mount/data" if IS_CLOUD else os.path.join(os.path.dirname(__file__), "data")
+
+BASE_DIR = st.secrets.get("DATA_DIR", DEFAULT_DATA_DIR)
+os.makedirs(BASE_DIR, exist_ok=True)
+
+DB_FICHAJES = os.path.join(BASE_DIR, "fichajes.db")
+DB_RRHH     = os.path.join(BASE_DIR, "rrhh.db")
+BAJAS_DIR   = os.path.join(BASE_DIR, "bajas_adjuntos")
+os.makedirs(BAJAS_DIR, exist_ok=True)
+
+auth.generarLogin(__file__)                     
+ui.generarMenuRoles(st.session_state["usuario"])
+
+
 
 
 # ======== Config DB (SQLite) ========
@@ -240,6 +242,7 @@ with tab2:
                             st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
 
                             st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
+
 
 
 
