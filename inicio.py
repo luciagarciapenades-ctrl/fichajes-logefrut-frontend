@@ -2,7 +2,7 @@ import streamlit as st
 import supabase_login_shim as auth
 import ui_pages as ui  # <- tu archivo renombrado
 
-st.set_page_config(layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 
 # ---- Estilos base: sin header, sin menú y con menos margen superior ----
 st.markdown("""
