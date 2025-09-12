@@ -35,6 +35,21 @@ DB_FILE = DB_RRHH
 VAC_TABLE = "vacaciones"
 BAJ_TABLE = "bajas"
 
+##eliminar 3 puntos 
+def boot():
+    st.set_page_config(
+        layout="wide",
+        initial_sidebar_state="collapsed",
+        menu_items={"Get help": None, "Report a bug": None, "About": None}
+    )
+    st.markdown("""
+    <style>
+      /* Ocultar menú 3 puntos y footer */
+      div[data-testid="stMainMenu"] { visibility: hidden; }
+      #MainMenu { visibility: hidden; } /* compat */
+      footer { visibility: hidden; }
+    </style>
+    """, unsafe_allow_html=True)
 
 def get_conn():
     os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
@@ -219,3 +234,4 @@ with tab2:
                             st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
 
                             st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
+
