@@ -31,6 +31,10 @@ except Exception:
     Image = None
     decode_qr = None
 
+
+from app_boot import boot
+boot()
+
 # ======== Config ========
 BASE_DIR = st.secrets.get("DATA_DIR", "C:\\FichajesMovil\\data")
 DB_FICHAJES = os.path.join(BASE_DIR, "fichajes.db")
@@ -50,21 +54,7 @@ ui.generarMenuRoles(st.session_state["usuario"])
 DB_FILE = DB_FICHAJES
 TABLE = "fichajes"
 
-##eliminar 3 puntos 
-def boot():
-    st.set_page_config(
-        layout="wide",
-        initial_sidebar_state="collapsed",
-        menu_items={"Get help": None, "Report a bug": None, "About": None}
-    )
-    st.markdown("""
-    <style>
-      /* Ocultar menú 3 puntos y footer */
-      div[data-testid="stMainMenu"] { visibility: hidden; }
-      #MainMenu { visibility: hidden; } /* compat */
-      footer { visibility: hidden; }
-    </style>
-    """, unsafe_allow_html=True)
+
 
 def get_conn():
     os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
@@ -297,6 +287,7 @@ if not df_hist.empty:
         "fuente": "Método",
     })
 st.dataframe(df_hist, use_container_width=True)
+
 
 
 
