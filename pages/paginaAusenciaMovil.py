@@ -4,6 +4,10 @@ import pandas as pd
 import sqlite3
 from datetime import datetime, date, timedelta
 import config as cfg
+from supadb import baja_insert
+baja_insert(uid, email, tipo, str(desde), str(hasta), motivo)
+st.success("Solicitud enviada")
+
 
 import os, sys
 ROOT = os.path.dirname(os.path.dirname(__file__))  # .../app
@@ -242,6 +246,7 @@ with tab2:
                             st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
 
                             st.caption(f"• {os.path.basename(ruta)} (no encontrado)")
+
 
 
 
