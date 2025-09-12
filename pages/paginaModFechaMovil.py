@@ -27,7 +27,22 @@ os.makedirs(BAJAS_DIR, exist_ok=True)
 auth.generarLogin(__file__)                      
 ui.generarMenuRoles(st.session_state["usuario"])
 
-
+##eliminar 3 puntos 
+def boot():
+    st.set_page_config(
+        layout="wide",
+        initial_sidebar_state="collapsed",
+        menu_items={"Get help": None, "Report a bug": None, "About": None}
+    )
+    st.markdown("""
+    <style>
+      /* Ocultar menú 3 puntos y footer */
+      div[data-testid="stMainMenu"] { visibility: hidden; }
+      #MainMenu { visibility: hidden; } /* compat */
+      footer { visibility: hidden; }
+    </style>
+    """, unsafe_allow_html=True)
+    
 DB_FILE = DB_FICHAJES
 TABLE = "fichajes"
 
@@ -200,6 +215,7 @@ nota = st.text_input("Motivo / observación (opcional)")
 # donde está el botón "Guardar par Entrada/Salida"
 if st.button("Guardar par Entrada/Salida", type="primary", disabled=True):
     st.info("El guardado manual se habilitará cuando añadamos el endpoint /fichajes/manual en el backend.")
+
 
 
 
