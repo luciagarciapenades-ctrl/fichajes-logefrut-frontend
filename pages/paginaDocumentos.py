@@ -30,19 +30,7 @@ div[data-testid="stToolbar"] { display: none !important; visibility: hidden !imp
 </style>
 """, unsafe_allow_html=True)
 
-def collapse_sidebar_if_flag():
-    if st.session_state.pop("_collapse_sidebar_now", False):
-        components.html("""
-        <script>
-        // en móvil, pulsa el botón de cerrar del sidebar
-        const doc = parent.document;
-        if (window.innerWidth < 840) {
-          const btn = doc.querySelector('[data-testid="collapsedControl"] button')
-                   || doc.querySelector('[data-testid="expandedControl"] button');
-          if (btn) btn.click();
-        }
-        </script>
-        """, height=0)
+ui.hide_top_ui(hide_menu=True, hide_footer=True, hide_header=False)
 
 # ---- Login y menú estándar de tu app ----
 # Tu shim hace stop() si no hay sesión "local" (cookie/CSV)
